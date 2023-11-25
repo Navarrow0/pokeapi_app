@@ -9,7 +9,7 @@ class ListSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
+      baseColor: Colors.grey[600]!,
       highlightColor: Colors.grey[100]!,
       child: ListView.separated(
         itemCount: 6,

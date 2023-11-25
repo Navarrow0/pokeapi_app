@@ -27,7 +27,6 @@ class PokemonListNotifier extends StateNotifier<PokemonListState> {
 
     either.fold(
           (error) {
-        // Manejo del error
         state = PokemonListState(pokemonList: state.pokemonList, errorMessage: error);
       },
           (result) {
