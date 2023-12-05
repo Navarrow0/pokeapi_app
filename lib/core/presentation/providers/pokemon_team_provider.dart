@@ -13,13 +13,16 @@ class PokemonTeamNotifier extends StateNotifier<List<PokemonModel>> {
     return state;
   }
 
-  void addToTeam(PokemonModel pokemon) {
-    if (state.length < 5) {
+  bool addToTeam(PokemonModel pokemon) {
+    if (!state.contains(pokemon) && state.length < 5) {
       state = [...state, pokemon];
+      return true;
     }
+    return false;
   }
 
   void removeFromTeam(PokemonModel pokemon) {
     state = state.where((p) => p != pokemon).toList();
   }
+
 }

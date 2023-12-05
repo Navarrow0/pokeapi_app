@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokeapi_app/core/presentation/providers/app_providers.dart';
 import 'package:pokeapi_app/core/presentation/providers/pokemon_team_provider.dart';
-import 'package:pokeapi_app/core/presentation/widgets/card_pokemon.dart';
-import 'package:pokeapi_app/core/presentation/widgets/pokemon_dialog.dart';
-import 'package:pokeapi_app/core/presentation/widgets/skeleton.dart';
+import 'package:pokeapi_app/core/presentation/widgets/widgets.dart';
 
 
 class PokemonListScreen extends ConsumerStatefulWidget {
@@ -26,7 +24,6 @@ class _PokemonListScreenState extends ConsumerState<PokemonListScreen> {
       ref.read(pokemonListNotifierProvider.notifier).loadMore();
     });
   }
-
 
   @override
   void dispose() {
@@ -62,32 +59,20 @@ class _PokemonListScreenState extends ConsumerState<PokemonListScreen> {
     ).show(context);
   }
 
+  void _showAlreadyInTeamNotification(BuildContext context) {
+    ElegantNotification.info(
+      title: const Text("Información"),
+      description: const Text("Este Pokémon ya está en tu equipo."),
+    ).show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final pokemonListState = ref.watch(pokemonListNotifierProvider);
     final teamNotifier = ref.watch(pokemonTeamProvider.notifier);
 
-
     return Scaffold(
-      appBar: AppBar(
-          title: const Text(
-            'Pokedex',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: InkWell(
-                onTap: () {
-                  showPokemonTeamDialog(context);
-                },
-                child: Image.asset(
-                  'assets/pokebola.png',
-                  width: 30,
-                ),
-              ),
-            ),
-          ]),
+      appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         controller: _scrollController,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -107,7 +92,9 @@ class _PokemonListScreenState extends ConsumerState<PokemonListScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: pokemonListState.pokemonList.length + 1,
-                separatorBuilder: (_,index)=> const SizedBox(height: 10,),
+                separatorBuilder: (_, index) => const SizedBox(
+                  height: 10,
+                ),
                 itemBuilder: (BuildContext ctx, index) {
                   if (index < pokemonListState.pokemonList.length) {
                     final pokemon = pokemonListState.pokemonList[index];
@@ -115,11 +102,13 @@ class _PokemonListScreenState extends ConsumerState<PokemonListScreen> {
                     return CardPokemon(
                       pokemon: pokemon,
                       onPressed: () {
-                        if (teamNotifier.getTeam().length < 5) {
-                          teamNotifier.addToTeam(pokemon);
+                        final wasAdded = teamNotifier.addToTeam(pokemon);
+                        if (wasAdded) {
                           _showSuccessNotification(context);
-                        } else {
+                        } else if (teamNotifier.getTeam().length >= 5) {
                           _showErrorNotification(context);
+                        } else {
+                          _showAlreadyInTeamNotification(context);
                         }
                       },
                     );
@@ -130,11 +119,9 @@ class _PokemonListScreenState extends ConsumerState<PokemonListScreen> {
                   }
                 },
               )
-
           ],
         ),
       ),
     );
   }
 }
-
