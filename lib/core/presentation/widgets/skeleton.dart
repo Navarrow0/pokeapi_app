@@ -1,7 +1,5 @@
 
-
-import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
+part of 'widgets.dart';
 
 class ListSkeleton extends StatelessWidget {
   const ListSkeleton({super.key});

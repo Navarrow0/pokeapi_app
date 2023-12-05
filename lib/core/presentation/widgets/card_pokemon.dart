@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:pokeapi_app/core/application/utils/capitalize_first_letter.dart';
-import 'package:pokeapi_app/core/data/models/pokemon_model.dart';
+part of 'widgets.dart';
 
 class CardPokemon extends StatelessWidget {
   const CardPokemon({super.key, required this.pokemon, this.onPressed, this.isDelete = false});
@@ -72,7 +70,7 @@ class CardPokemon extends StatelessWidget {
                   pokemon.frontDefaultImage,
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.high,
-                  width: 120,
+                  width: 140,
                 ),
               ],
             ),

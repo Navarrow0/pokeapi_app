@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pokeapi_app/core/presentation/providers/pokemon_team_provider.dart';
-import 'package:pokeapi_app/core/presentation/widgets/card_pokemon.dart';
-
+part of 'widgets.dart';
 
 void showPokemonTeamDialog(BuildContext context) {
   showDialog(
